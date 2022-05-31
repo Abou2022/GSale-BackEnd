@@ -1,6 +1,6 @@
 'use strict';
 
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const isEmail = function (email) {

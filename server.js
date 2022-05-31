@@ -1,35 +1,30 @@
 'use strict';
 
 const express = require('express');
-const session = require('express-session');
 const compression = require('compression');
 const cors = require("cors");
 
 const db = require('./config/connection');
-const MongoStore = require('connect-mongo');
 const routes = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 },
-    store: MongoStore.create({
-        client: db.getClient(),
-        dbName: "gSaleDB", // *** IMPORTANT UPDATE THIS TO MATCH DBNAME ON DEPLOYED !!!!
-        stringify: false,
-        autoRemove: 'interval',
-        autoRemoveInterval: 1,
-    }),
-}));
-
 app.use(express.urlencoded({ extended: true })); // parses incoming requests with URL-encoded payloads.
 app.use(express.json()); // parses incoming requests with JSON payloads
 app.use(compression());
-app.use(cors());
+
+const whitelist = ['http://localhost:3000'];
+app.use(cors({
+    credentials: true,
+    origin: (origin, cb) => {
+        if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
+            cb(null, true);
+        } else {
+            cb(new Error(`${origin} Not allowed by CORS`));
+        }
+    },
+}));
 app.use(routes);
 
 db.once('open', () => {

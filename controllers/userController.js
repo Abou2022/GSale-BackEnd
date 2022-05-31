@@ -16,8 +16,10 @@ module.exports = {
             const user = await User.create(req.body);
             const profile = await Profile.create({ userId: user._id, email: user.email });
             const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
-            req.session.user = { userId: user._id, profileId: profile._id, loggedIn: true };
-            req.session.save(() => res.json({ token, profile }));
+            // res.cookie('gSaleToken', token);
+            // res.send(token);
+            // to do check and see how token is sent
+            res.json({ token, profile });
         } catch (err) {
             console.log("createUser err: ", err);
             next(createError(500, err.message));
@@ -39,8 +41,7 @@ module.exports = {
             if (validPassword) {
                 const profile = await Profile.create({ userId: user._id, email: user.email });
                 const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
-                req.session.user = { userId: user._id, profileId: profile._id, loggedIn: true };
-                req.session.save(() => res.json({ token, profile }));
+                res.json({ token, profile });
             } else {
                 return res.status(403).send("invalid credentials");
             }
@@ -54,9 +55,7 @@ module.exports = {
         try {
             if (req.session.user.loggedIn) {
                 // to do delete jsonwebtoken
-                req.session.destroy(() => {
-                    res.status(204).end();
-                });
+                res.status(204).end();
             } else {
                 res.status(404).end();
             }
@@ -74,6 +73,7 @@ module.exports = {
                 { $set: req.body },
                 { runValidators: true, new: true }
             );
+            // pre save probably new object
             !user ? res.status(404).json({ message: 'No user with this id!' }) : res.json(user);
         } catch (err) {
             console.log("update user err: ", err);

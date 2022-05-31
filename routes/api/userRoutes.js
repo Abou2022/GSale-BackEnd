@@ -10,7 +10,7 @@ const {
 } = require('../../controllers/userController');
 
 // /api/users
-router.route('/').post(createUser);
+router.route('/signup').post(createUser);
 
 // /api/users/login
 router.route('/login').post(login);

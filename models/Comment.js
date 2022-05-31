@@ -1,6 +1,6 @@
 'use strict';
 
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
 const commentSchema = new Schema(
 	{

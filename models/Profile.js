@@ -1,6 +1,6 @@
 'use strict';
 
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
 const profileSchema = new Schema(
 	{
@@ -16,7 +16,7 @@ const profileSchema = new Schema(
         },
         firstName: {
             type: String,
-            required: true,
+            // required: true,
             trim: true,
         },
         lastName: {
