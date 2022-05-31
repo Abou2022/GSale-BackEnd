@@ -1,112 +1,93 @@
 'use strict';
 
-const { User } = require('../models');
+const jwt = require("jsonwebtoken");
+const createError = require('http-errors');
+const { User, Profile } = require('../models');
 
 module.exports = {
-    async createUser(req, res) {
+    // post /signup
+    async createUser(req, res, next) {
         try {
-
+            const message = !req.body.password ? 'expected a password'
+                : !req.body.email ? 'expected an email'
+                    : null;
+            if (message)
+                return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
+            const user = await User.create(req.body);
+            const profile = await Profile.create({ userId: user._id, email: user.email });
+            const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+            req.session.user = { userId: user._id, profileId: profile._id, loggedIn: true };
+            req.session.save(() => res.json({ token, profile }));
         } catch (err) {
             console.log("createUser err: ", err);
-            res.status(500).json(err)
+            next(createError(500, err.message));
         }
-    }
-    // // Get all users
-    // getUsers(req, res) {
-    //     User.find()
-    //         .then(users => res.json(users))
-    //         .catch((err) => {
-    //             console.log(err);
-    //             return res.status(500).json(err);
-    //         });
-    // },
-    // // Get a single user
-    // getSingleUser(req, res) {
-    //     User.findOne({ _id: req.params.userId })
-    //         .select('_id username email friendCount')
-    //         .populate({ path: 'thoughts', select: '_id thoughtText username createdAt reactions __v reactionCount', populate: { path: 'reactions', select: 'reactionId createdAt _id reactionBody username' } })
-    //         .populate({ path: 'friends', select: 'thoughts friends _id username email __v friendCount' })
-    //         .then(user => {
-    //             console.log("user: ", user);
-    //             !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //             return res.status(500).json(err);
-    //         });
-    // },
-    // // create a new user
-    // createUser(req, res) {
-    //     User.create(req.body)
-    //         .then((user) => res.json(user))
-    //         .catch((err) => res.status(500).json(err));
-    // },
-    // // Delete a user and remove them from the thought
-    // deleteUser(req, res) {
-    //     User.findOneAndRemove({ _id: req.params.userId })
-    //         .then(async (user) =>
-    //             !user ? res.status(404).json({ message: 'No such user exists' }) : await Thought.remove({ username: user.username })
-    //         )
-    //         .then(thought =>
-    //             !thought ? res.status(404).json({ message: 'User deleted, but no thoughts found' }) : res.json({ message: 'User and associated thoughts deleted!' })
-    //         )
-    //         .catch((err) => {
-    //             console.log(err);
-    //             res.status(500).json(err);
-    //         });
-    // },
-    // // update user 
-    // updateUser(req, res) {
-    //     User.findOneAndUpdate(
-    //         { _id: req.params.userId },
-    //         { $set: req.body },
-    //         { runValidators: true, new: true }
-    //     )
-    //         .then((user) =>
-    //             !user ? res.status(404).json({ message: 'No user with this id!' }) : res.json(user)
-    //         )
-    //         .catch((err) => res.status(500).json(err));
-    // },
-
-    // addFriend(req, res) {
-    //     User.findOneAndUpdate(
-    //         { _id: req.params.userId },
-    //         { $addToSet: { friends: req.params.friendId } },
-    //         { runValidators: true, new: true }
-    //     )
-    //         .then(async user => {
-    //             if (!user) {
-    //                 res.status(404).json({ message: 'No user with this id!' })
-    //             } else {
-    //                 const friend = await User.findOneAndUpdate(
-    //                     { _id: req.params.friendId },
-    //                     { $addToSet: { friends: req.params.userId } },
-    //                     { runValidators: true, new: true }
-    //                 )
-    //                 !friend ? res.status(404).json({ message: 'No friend with this id!' }) : res.json(user)
-    //             }
-    //         })
-    //         .catch((err) => res.status(500).json(err));
-    // },
-
-    // removeFriend(req, res) {
-    //     User.findOneAndUpdate(
-    //         { _id: req.params.userId },
-    //         { $pull: { friends: req.params.friendId } },
-    //         { runValidators: true, new: true }
-    //     )
-    //         .then(async user => {
-    //             if (!user) {
-    //                 res.status(404).json({ message: 'No user with this id!' })
-    //             } else {
-    //                 const friend = await User.findOneAndUpdate(
-    //                     { _id: req.params.friendId },
-    //                     { $pull: { friends: req.params.userId } },
-    //                     { runValidators: true, new: true }
-    //                 )
-    //                 !friend ? res.status(404).json({ message: 'No friend with this id!' }) : res.json(user)
-    //             }
-    //         })
-    //         .catch((err) => res.status(500).json(err));
-    // }
+    },
+    // post /login
+    async login(req, res, next) {
+        try {
+            const message = !req.body.password ? 'expected a password'
+                : !req.body.email ? 'expected an email'
+                    : null;
+            if (message)
+                return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
+            const user = await User.findOne({ where: { email: req.body.email.toLowerCase() } });
+            if (!user) {
+                return res.status(403).send("invalid credentials")
+            }
+            const validPassword = await user.checkPassword(req.body.password);
+            if (validPassword) {
+                const profile = await Profile.create({ userId: user._id, email: user.email });
+                const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+                req.session.user = { userId: user._id, profileId: profile._id, loggedIn: true };
+                req.session.save(() => res.json({ token, profile }));
+            } else {
+                return res.status(403).send("invalid credentials");
+            }
+        } catch (err) {
+            console.log("login err: ", err);
+            next(createError(500, err.message));
+        }
+    },
+    // post /logout
+    async logout(req, res, next) {
+        try {
+            if (req.session.user.loggedIn) {
+                // to do delete jsonwebtoken
+                req.session.destroy(() => {
+                    res.status(204).end();
+                });
+            } else {
+                res.status(404).end();
+            }
+        } catch (err) {
+            console.log("logout err: ", err);
+            next(createError(500, err.message));
+        }
+    },
+    // put /:userId
+    async updateUser(req, res, next) {
+        try {
+            // to do check if the user on the pre hook is the old or the new
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $set: req.body },
+                { runValidators: true, new: true }
+            );
+            !user ? res.status(404).json({ message: 'No user with this id!' }) : res.json(user);
+        } catch (err) {
+            console.log("update user err: ", err);
+            next(createError(500, err.message))
+        }
+    },
+    // get /:userId
+    async getSingleUser(req, res, next) {
+        try {
+            const user = await User.findOne({ _id: req.params.userId });
+            !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user);
+        } catch (err) {
+            console.log("get user err: ", err);
+            next(createError(500, err.message))
+        }
+    },
 };
