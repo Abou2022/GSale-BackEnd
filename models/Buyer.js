@@ -3,11 +3,20 @@
 const { Schema, Types } = require('mongoose');
 
 const buyerSchema = new Schema(
-	{
-        profileId: {},
-        garageSaleEventId: {},
-        sellerIds: {}
-	}
+    {
+        profileId: {
+            type: Types.ObjectId,
+            ref: 'profile',
+        },
+        garageSaleEventId: {
+            type: Types.ObjectId,
+            ref: 'garageSaleEvent',
+        },
+        sellerIds: [{
+            type: Types.ObjectId,
+            ref: 'seller',
+        }]
+    }
 );
 
-module.exports = buyerSchema;
+module.exports = model('buyer', buyerSchema);
