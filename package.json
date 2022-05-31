@@ -1,0 +1,38 @@
+{
+  "name": "gsale-backend",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "16.14.2",
+    "yarn": "1.22.19",
+    "npm": "8.5.0"
+  },
+  "main": "server.js",
+  "scripts": {
+    "watch": "nodemon server.js",
+    "seed": "node seeds/index.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abou2022/GSale-BackEnd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abou2022/GSale-BackEnd/issues"
+  },
+  "homepage": "https://github.com/Abou2022/GSale-BackEnd#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.6.0",
+    "mongoose": "^6.3.4"
+  }
+}
