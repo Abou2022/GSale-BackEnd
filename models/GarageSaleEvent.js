@@ -1,78 +1,101 @@
 'use strict';
 
-const { Schema, Types, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const garageSaleEventSchema = new Schema(
+const sequelize = require('../config/connection');
+
+class garageSaleEvent extends Model { }
+
+garageSaleEvent.init(
 	{
+        id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
+		},
         eventName: {
-            type: String,
+            type: DataTypes.STRING,
 			required: true,
-            trim: true,
-            max_length: 50,
-            minlength: 1,
         },
         endTime: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
         },
         startTime: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
         },
         startDate: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
         },
         endDate: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
         },
         createdOn: {
-            type: Date,
-            default: Date.now,
+            type: DataTypes.DATE,
+            defaultValue: Date.now,
         },
-        creatorId: {
-            type: Types.ObjectId,
-            ref: 'profile',
+        creator_id: {
+            type: DataTypes.INTEGER,
+			references: {
+				model: 'profile',
+				key: 'id',
+				unique: false
+			}
         },
         location: {
-            type: String
+            type: DataTypes.TEXT
             // google geocoder, what to put here?
         },
         description: {
-            type: String,
+            type: DataTypes.TEXT,
 			required: true,
-            trim: true,
-            max_length: 250,
-            minlength: 1,
         },
         imageURL: {
-            type: String,
+            type: DataTypes.STRING,
         },
         createdOn: {
-            type: Date,
-            default: Date.now,
+            type: DataTypes.DATE,
+            defaultValue: Date.now,
         },
-        buyers: [{
-            type: Types.ObjectId,
-            ref: 'buyer',
-        }],
-        sellers: [{
-            type: Types.ObjectId,
-            ref: 'seller',
-        }],
-        comments: [{
-            type: Types.ObjectId,
-            ref: 'comment',
-        }],
-        qrCode: {
-            type: String,
+        buyer_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'buyer',
+                key: 'id',
+			}
         },
-        categories: [{
-            type: String, enum: ["admin", "basic", "super"]
-            // update to real categories
-        }]
+        seller_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'seller',
+                key: 'id',
+			}
+        },
+        messageBoard_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'messageBoard',
+                key: 'id',
+                unique: false
+			}
+        },
+        categories: {
+            type: DataTypes.ARRAY(DataTypes.ENUM({
+              values: ["furniture", "kitchenware", "clothing", "electronic", "game", "sports equipment"]
+            }))
+        }
+	},
+    {
+		sequelize,
+		timestamps: false,
+		freezeTableName: true,
+		underscored: true,
+		modelName: 'garageSaleEvent',
 	}
 );
 
-module.exports = model('garageSaleEvent', garageSaleEventSchema);
+module.exports = garageSaleEvent;

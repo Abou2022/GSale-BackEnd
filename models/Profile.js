@@ -1,57 +1,90 @@
 'use strict';
 
-const { Schema, Types, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const profileSchema = new Schema(
+const sequelize = require('../config/connection');
+
+class Profile extends Model { }
+
+Profile.init(
 	{
-        userId: {
-            type: Types.ObjectId,
-            ref: 'user',
+        id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
+		},
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+			references: {
+				model: 'user',
+				key: 'id',
+				unique: false
+			}
         },
         email: {
-            type: String,
+            type: DataTypes.STRING,
 			unique: true,
 			required: true,
-            trim: true,
+            allowNull: false,
+            validate:{
+                isEmail:true
+            }
         },
         firstName: {
-            type: String,
+            type: DataTypes.STRING,
             // required: true,
-            trim: true,
         },
         lastName: {
-            type: String,
-            trim: true,
+            type: DataTypes.STRING,
         },
         phoneNumber: {
-            type: Number,
-            trim: true,
-            // add validation
+            type: DataTypes.NUMBER,
+            validate: {
+				isNumeric: true
+			}
         },
         imageURL: {
-            type: String,
-            trim: true,
+            type: DataTypes.STRING,
         },
-        intersts: [{
-            type: String, enum: ["admin", "basic", "super"]
-        }],
-        garageSaleEvents: [{
-            type: Types.ObjectId,
-            ref: 'garageSaleEvent',
-        }],
-        selling: [{
-            type: Types.ObjectId,
-            ref: 'seller',
-        }],
-        buying: [{
-            type: Types.ObjectId,
-            ref: 'buyer',
-        }],
-        emailValidated: {
-            type: Boolean,
-            default: false,
+        categories: {
+            type: DataTypes.ARRAY(DataTypes.ENUM({
+              values: ["furniture", "kitchenware", "clothing", "electronic", "game", "sports equipment"]
+            }))
         },
+        garageSaleEvent_id: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+			references: {
+				model: 'garageSaleEvent',
+				key: 'id',
+				unique: false
+			}
+        },
+        seller_id: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+			references: {
+				model: 'seller',
+				key: 'id',
+				unique: false
+			}
+        },
+        buyer_id: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+			references: {
+				model: 'buyer',
+				key: 'id',
+				unique: false
+			}
+        },
+	},
+    {
+		sequelize,
+		timestamps: false,
+		freezeTableName: true,
+		underscored: true,
+		modelName: 'profile',
 	}
 );
 
-module.exports = model('profile', profileSchema);
+module.exports = Profile;

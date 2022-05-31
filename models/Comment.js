@@ -1,29 +1,59 @@
 'use strict';
 
-const { Schema, Types, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const commentSchema = new Schema(
+const sequelize = require('../config/connection');
+
+class Comment extends Model { }
+
+Comment.init(
 	{
-        profileId: {
-            type: Types.ObjectId,
-            ref: 'profile',
+        id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
+		},
+        profile_id: {
+            type: DataTypes.INTEGER,
+            references: {
+				model: 'profile',
+				key: 'id',
+				unique: false
+			}
         },
         content: {
-            type: String,
+            type: DataTypes.TEXT,
 			required: true,
-            trim: true,
-            max_length: 280,
-            minlength: 1
         },
         createdOn: {
-            type: Date,
-            default: Date.now,
+            type: DataTypes.DATE,
+            defaultValue: Date.now,
         },
-        garageSaleEventId: {
-            type: Types.ObjectId,
-            ref: 'garageSaleEvent',
-        }
+        garageSaleEvent_id: {
+            type: DataTypes.INTEGER,
+            references: {
+				model: 'garageSaleEvent',
+				key: 'id',
+				unique: false
+			}
+        },
+        messageBoard_id: {
+            type: DataTypes.INTEGER,
+            references: {
+				model: 'messageBoard',
+				key: 'id',
+				unique: false
+			}
+        },
+	},
+    {
+		sequelize,
+		timestamps: false,
+		freezeTableName: true,
+		underscored: true,
+		modelName: 'comment',
 	}
 );
 
-module.exports = model('comment', commentSchema);
+module.exports = Comment;

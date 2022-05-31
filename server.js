@@ -1,17 +1,18 @@
 'use strict';
 
 const express = require('express');
+const routes = require('./routes'); //look for index.js in routes
+// import sequelize connection
 const compression = require('compression');
 const cors = require("cors");
-
-const db = require('./config/connection');
-const routes = require('./routes');
+const sequelize = require('./config/connection');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(express.urlencoded({ extended: true })); // parses incoming requests with URL-encoded payloads.
-app.use(express.json()); // parses incoming requests with JSON payloads
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //allows other url encoding
+
 app.use(compression());
 
 const whitelist = ['http://localhost:3000'];
@@ -27,8 +28,9 @@ app.use(cors({
 }));
 app.use(routes);
 
-db.once('open', () => {
-    app.listen(PORT, () => {
-        console.log(`API server running on port ${PORT}!`);
-    });
+// sync sequelize models to the database, then turn on the server
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
+  });
 });
