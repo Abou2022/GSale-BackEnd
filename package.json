@@ -11,14 +11,16 @@
   "scripts": {
     "watch": "nodemon server.js",
     "seed": "node seeds/index.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "resetdb": "mysql -u root -p <  ./db/schema.sql",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abou2022/GSale-BackEnd.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrew Ryu, Brian Bixby, Bakary Sylla, Joe Choe",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Abou2022/GSale-BackEnd/issues"
@@ -27,12 +29,14 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
+    "connect-session-sequelize": "^7.1.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^4.6.0",
-    "mongoose": "^6.3.4"
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.20.1",
+    "socket.io": "^4.5.1"
   }
 }

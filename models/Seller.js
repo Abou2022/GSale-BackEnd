@@ -1,54 +1,85 @@
 'use strict';
 
-const { Schema, Types, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const sellerSchema = new Schema(
+const sequelize = require('../config/connection');
+
+class Seller extends Model { }
+
+Seller.init(
 	{
-        profileId: {
-            type: Types.ObjectId,
-            ref: 'profile',
+        id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
+		},
+        profile_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'profile',
+                key: 'id',
+                unique: false
+                },
             required: true,
+            allowNull: false,
         },
-        garageSaleEventId: {
-            type: Types.ObjectId,
-            ref: 'garageSaleEvent',
+        garageSaleEvent_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'garageSaleEvent',
+                key: 'id',
+                unique: false
+                },
             required: true,
+            allowNull: false,
         },
         address: {
-            type: String,
+            type: DataTypes.STRING,
 			required: true,
-            trim: true,
+            allowNull: false,
         },
         endTime: {
-            type: Date,
+            type: DataTypes.TIME,
             required: true,
+            allowNull: false,
         },
         startTime: {
-            type: Date,
+            type: DataTypes.TIME,
             required: true,
+            allowNull: false,
         },
         startDate: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
+            allowNull: false,
         },
         endDate: {
-            type: Date,
+            type: DataTypes.DATE,
             required: true,
+            allowNull: false,
         },
-        categories: [{
-            type: String, enum: ["admin", "basic", "super"]
-        }],
-        images: [{
-            type: String
-        }],
+        categories: {
+            type: DataTypes.ARRAY(DataTypes.ENUM({
+              values: ["furniture", "kitchenware", "clothing", "electronic", "game", "sports equipment"]
+            }))
+        },
+        images: {
+            type: DataTypes.STRING
+        },
         description: {
-            type: String,
+            type: DataTypes.STRING,
 			required: true,
-            trim: true,
-            max_length: 250,
-            minlength: 1,
+            allowNull: false,
         },
+	},
+    {
+		sequelize,
+		timestamps: false,
+		freezeTableName: true,
+		underscored: true,
+		modelName: 'seller',
 	}
 );
 
-module.exports = model('seller', sellerSchema);
+module.exports = Seller;

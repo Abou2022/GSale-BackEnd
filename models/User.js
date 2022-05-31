@@ -1,57 +1,67 @@
-'use strict';
+"use strict";
 
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../config/connection");
+const bcrypt = require("bcrypt");
 
-const isEmail = function (email) {
-    var re = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-    return re.test(email)
-};
-
-const userSchema = new Schema(
-    {
-        email: {
-            type: String,
-            unique: true,
-            required: true,
-            validate: [isEmail, 'invalid email'],
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        // findHash: {
-        //     type: String,
-        //     unique: true
-        //     // allowNull:false,
-        // },
+class User extends Model {
+  async checkPassword(password) {
+    try {
+      const data = await bcrypt.compare(password, this.password);
+      return data;
+    } catch (err) {
+      return null;
     }
+  }
+}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [8],
+      },
+    },
+  },
+  {
+    hooks: {
+      beforeCreate: async (data) => {
+        data.email = data.email.toLowerCase();
+        data.password = await bcrypt.hash(data.password, 5);
+        return data;
+      },
+      beforeUpdate: async (data) => {
+        if (data.email) {
+          data.email = data.email.toLowerCase();
+        }
+        if (data.password) {
+          data.password = await bcrypt.hash(data.password, 5);
+        }
+        return data;
+      },
+    },
+    sequelize,
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
+    modelName: "user",
+  }
 );
 
-userSchema.methods.checkPassword = async function (password) {
-    try {
-        const data = await bcrypt.compare(password, this.password);
-        return data;
-    } catch (err) {
-        return null;
-    }
-};
-
-
-userSchema.pre(['create', 'findOneAndUpdate'], async function () {
-    try {
-        console.log("pre create/update: ", this);
-        if (this.email) {
-            this.email = this.email.toLowerCase();
-        }
-        if (this.password) {
-            this.password = await bcrypt.hash(this.password, 5);
-        }
-    }
-    catch (err) {
-        console.log("pre create/update err: ", err);
-    }
-});
-
-module.exports = model('user', userSchema);
+module.exports = User;

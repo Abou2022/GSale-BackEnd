@@ -4,9 +4,9 @@ const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection');
 
-class Buyer extends Model { }
+class MessageBoard extends Model { }
 
-Buyer.init(
+MessageBoard.init(
     {
         id: {
 			type: DataTypes.INTEGER,
@@ -14,14 +14,6 @@ Buyer.init(
 			primaryKey: true,
 			autoIncrement: true
 		},
-        profile_id: {
-            type: DataTypes.INTEGER,
-            references: {
-				model: 'profile',
-				key: 'id',
-				unique: false
-			}
-        },
         garageSaleEvent_id: {
             type: DataTypes.INTEGER,
             references: {
@@ -30,22 +22,22 @@ Buyer.init(
 				unique: false
 			}
         },
-        seller_id: {
+        comment_id: {
             type: DataTypes.INTEGER,
             references: {
-				model: 'seller',
+				model: 'comment',
 				key: 'id',
 				unique: false
 			}
-        }
+        },
     },
     {
 		sequelize,
 		timestamps: false,
 		freezeTableName: true,
 		underscored: true,
-		modelName: 'buyer',
+		modelName: 'messageBoard',
 	}
 );
 
-module.exports = Buyer;
+module.exports = MessageBoard;
