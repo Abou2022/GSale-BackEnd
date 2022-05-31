@@ -4,8 +4,8 @@ const { Schema, Types } = require('mongoose');
 
 const sellerSchema = new Schema(
 	{
-        userID: {},
-        garageSaleEventID: {},
+        profileId: {},
+        garageSaleEventId: {},
         address1: {},
         address2: {},
         city: {},

@@ -4,7 +4,7 @@ const { Schema, Types } = require('mongoose');
 
 const profileSchema = new Schema(
 	{
-        userID: {},
+        userId: {},
         email: {},
         firstName: {},
         lastName: {},

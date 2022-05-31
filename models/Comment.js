@@ -4,10 +4,10 @@ const { Schema, Types } = require('mongoose');
 
 const commentSchema = new Schema(
 	{
-        userID: {},
+        profileId: {},
         content: {},
         createdOn: {},
-        messageBoardID: {},
+        messageBoardId: {},
 	}
 );
 

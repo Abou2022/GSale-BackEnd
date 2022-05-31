@@ -8,7 +8,7 @@ const garageSaleEventSchema = new Schema(
         startDate: {},
         endDate: {},
         createdOn: {},
-        creatorID: {},
+        creatorId: {},
         location: {},
         description: {},
         imageURL: {},
@@ -16,7 +16,7 @@ const garageSaleEventSchema = new Schema(
         eventStatus: {},
         buyers: {},
         sellers: {},
-        messageBoardID: {},
+        comments: {},
         qrCode: {},
 	}
 );
