@@ -8,10 +8,37 @@ const Seller = require("./Seller");
 const User = require("./User");
 const MessageBoard = require("./MessageBoard");
 
+// TO DO: buyer has many sellers, sellers have 0 buyers
+// todo: garagesaleEvent now has profileId field
+// seller has profileId field & garageSaleEventId field
+// to do: done delete garageSaleEvent_id, seller and buyer from profile
+
 User.hasOne(Profile, { foreignKey: "user_id", onDelete: "CASCADE" });
 Profile.belongsTo(User, { foreignKey: "user_id" });
 
-// User.hasMany(Comment);
+Profile.hasMany(Buyer, { foreignKey: "profile_id" });
+Buyer.belongsTo(Profile);
+
+GarageSaleEvent.hasMany(Buyer, { foreignKey: "garageSaleEvent_id" });
+Buyer.belongsTo(GarageSaleEvent);
+
+Profile.hasMany(Seller, { foreignKey: "profile_id" });
+Seller.belongsTo(Profile);
+
+GarageSaleEvent.hasMany(Seller, { foreignKey: "garageSaleEvent_id" });
+Seller.belongsTo(GarageSaleEvent);
+
+Profile.hasMany(Comment, { foreignKey: "profile_id" });
+Comment.belongsTo(Profile);
+
+MessageBoard.hasMany(Comment, { foreignKey: "messageBoard_id" });
+Comment.belongsTo(MessageBoard);
+
+MessageBoard.hasOne(GarageSaleEvent, { foreignKey: "messageBoard_id", onDelete: "CASCADE" });
+GarageSaleEvent.belongsTo(MessageBoard, { foreignKey: "garageSaleEvent_id" });
+
+Profile.hasMany(GarageSaleEvent, { foreignKey: "creator_id" });
+GarageSaleEvent.belongsTo(Profile);
 
 module.exports = {
     Buyer,

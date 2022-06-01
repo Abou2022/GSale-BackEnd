@@ -60,36 +60,36 @@ Profile.init(
                 ],
                 )
         },
-        garageSaleEvent_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "garageSaleEvent",
-                key: "id",
-                unique: false,
-            },
-        },
-        seller_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "seller",
-                key: "id",
-                unique: false,
-            },
-        },
-        buyer_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "buyer",
-                key: "id",
-                unique: false,
-            },
-        },
+        // garageSaleEvent_id: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "garageSaleEvent",
+        //         key: "id",
+        //         unique: false,
+        //     },
+        // },
+        // seller_id: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "seller",
+        //         key: "id",
+        //         unique: false,
+        //     },
+        // },
+        // buyer_id: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "buyer",
+        //         key: "id",
+        //         unique: false,
+        //     },
+        // },
     },
     {
         sequelize,
         timestamps: false,
         freezeTableName: true,
-        underscored: true,
+        // underscored: true,
         modelName: "profile",
     }
 );
