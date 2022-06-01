@@ -1,59 +1,88 @@
-'use strict';
+const express = require("express");
+const router = express.Router();
+//need to double check the second line
+const { User, Buyer } = require("../models/");
+const bcrypt = require("bcrypt");
 
-const { Buyer } = require('../models');
+// find all
+router.get("/", (req, res) => {
+  Buyer.findAll({
+    // include:[User]
+  })
+    .then((dbBuyers) => {
+      res.json(dbBuyers);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "an error occured", err });
+    });
+});
 
-module.exports = {
-	// Get all buyers
-	getBuyers(req, res) {
-		Buyer.find()
-			.then(buyers => res.json(buyers))
-			.catch((err) => {
-				console.log(err);
-				return res.status(500).json(err);
-			});
-	},
-	// Get a single buyer
-	getSingleBuyer(req, res) {
-		Buyer.findOne({ _id: req.params.buyerId })
-			.then(buyer => {
-				console.log("buyer: ", buyer);
-				!buyer ? res.status(404).json({ message: 'No buyer with that ID' }) : res.json(buyer);
-			})
-			.catch((err) => {
-				console.log(err);
-				return res.status(500).json(err);
-			});
-	},
-	// create a new buyer
-	createBuyer(req, res) {
-		Buyer.create(req.body)
-			.then((buyer) => res.json(buyer))
-			.catch((err) => res.status(500).json(err));
-	},
-	// Delete a buyer and remove them from the thought
-	deleteBuyer(req, res) {
-		Buyer.findOneAndRemove({ _id: req.params.buyerId })
-			.then(async (buyer) =>
-				!buyer ? res.status(404).json({ message: 'No such buyer exists' }) : await Thought.remove({ buyername: buyer.buyername })
-			)
-			.then(thought =>
-				!thought ? res.status(404).json({ message: 'Buyer deleted, but no thoughts found' }) : res.json({ message: 'Buyer and associated thoughts deleted!' })
-			)
-			.catch((err) => {
-				console.log(err);
-				res.status(500).json(err);
-			});
-	},
-	// update buyer 
-	updateBuyer(req, res) {
-		Buyer.findOneAndUpdate(
-			{ _id: req.params.buyerId },
-			{ $set: req.body },
-			{ runValidators: true, new: true }
-		)
-			.then((buyer) =>
-				!buyer ? res.status(404).json({ message: 'No buyer with this id!' }) : res.json(buyer)
-			)
-			.catch((err) => res.status(500).json(err));
-	}
-};
+// find one
+router.get("/:id", (req, res) => {
+  Buyer.findByPk(req.params.id, {})
+    .then((dbBuyer) => {
+      res.json(dbBuyer);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "an error occured", err });
+    });
+});
+
+// create Buyer
+router.post("/", (req, res) => {
+  console.log(req.body);
+  const newBuyer = {
+    ...req.body,
+    //need to double check
+    user_id: req.session.user.id,
+  };
+  Buyer.create(newBuyer)
+    .then((newBuyer) => {
+      req.session.Pet = {
+        id: newBuyer.id,
+        // need to double check
+        Buyername: newBuyer.Buyername,
+      };
+      res.json(newBuyer);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "an error occured", err });
+    });
+});
+
+// update Buyer
+router.put("/:id", (req, res) => {
+  Buyer.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((updatedBuyer) => {
+      res.json(updatedBuyer);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "an error occured", err });
+    });
+});
+
+// delete a Pet
+router.delete("/:id", (req, res) => {
+  Buyer.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((delBuyer) => {
+      res.json(delBuyer);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "an error occured", err });
+    });
+});
+
+module.exports = router;
