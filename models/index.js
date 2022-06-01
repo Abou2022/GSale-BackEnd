@@ -6,7 +6,7 @@ const GarageSaleEvent = require("./GarageSaleEvent");
 const Profile = require("./Profile");
 const Seller = require("./Seller");
 const User = require("./User");
-
+const Item = require("./Item");
 // TO DO: buyer has many sellers, sellers have 0 buyers
 // todo: garagesaleEvent now has profileId field seller has profileId field & garageSaleEventId field
 
@@ -16,16 +16,34 @@ Profile.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
 Profile.hasMany(Buyer, { foreignKey: "profile_id", onDelete: "CASCADE" });
 Buyer.belongsTo(Profile, { foreignKey: "profile_id" });
 
-GarageSaleEvent.hasMany(Buyer, { foreignKey: "garageSaleEvent_id", onDelete: "CASCADE" });
-Buyer.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
+GarageSaleEvent.hasMany(Buyer, {
+  foreignKey: "garageSaleEvent_id",
+  onDelete: "CASCADE",
+});
+// Buyer.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
 
-Profile.hasMany(Seller, { foreignKey: "profile_id", onDelete: "CASCADE" });
-Seller.belongsTo(Profile, { foreignKey: "profile_id" });
+// Profile.hasMany(Seller, { foreignKey: "profile_id", onDelete: "CASCADE" });
+// Seller.belongsTo(Profile, { foreignKey: "profile_id" });
 
-GarageSaleEvent.hasMany(Seller, { foreignKey: "garageSaleEvent_id", onDelete: "CASCADE" });
-Seller.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
+// GarageSaleEvent.hasMany(Seller, {
+//   foreignKey: "garageSaleEvent_id",
+//   onDelete: "CASCADE",
+// });
 
-GarageSaleEvent.hasMany(Comment, { foreignKey: "garageSaleEvent_id", onDelete: "CASCADE" });
+// Seller.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
+Item.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
+Item.belongsTo(Profile, { foreignKey: "garageSaleEvent_id" });
+GarageSaleEvent.belongsToMany(Profile, { through: Item });
+Profile.belongsToMany(GarageSaleEvent, { through: Item });
+
+GarageSaleEvent.hasMany(Comment, {
+  foreignKey: "garageSaleEvent_id",
+  onDelete: "CASCADE",
+});
+
+// GarageSaleEvent.belongsToMany(Seller, { through: Item });
+// Seller.belongsToMany(GarageSaleEvent, { through: Item });
+
 Comment.belongsTo(GarageSaleEvent, { foreignKey: "garageSaleEvent_id" });
 
 Profile.hasMany(Comment, { foreignKey: "profile_id", onDelete: "CASCADE" });
@@ -35,10 +53,11 @@ Profile.hasMany(GarageSaleEvent, { foreignKey: "creator_id" });
 GarageSaleEvent.belongsTo(Profile, { foreignKey: "creator_id" });
 
 module.exports = {
-    Buyer,
-    Comment,
-    GarageSaleEvent,
-    Profile,
-    Seller,
-    User,
+  Buyer,
+  Comment,
+  GarageSaleEvent,
+  Profile,
+  Seller,
+  User,
+  Item,
 };
