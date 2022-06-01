@@ -15,9 +15,6 @@ router.post('/', async (req, res) => {
         const user = await User.create(req.body);
         const profile = await Profile.create({ userId: user._id, email: user.email });
         const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
-        // res.cookie('gSaleToken', token);
-        // res.send(token);
-        // to do check and see how token is sent
         res.json({ token, profile });
     } catch (err) {
         res.status(400).json(err);
@@ -48,17 +45,13 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', async (req, res) => {
-    try {
-        if (req.session.user.loggedIn) {
-            // to do delete jsonwebtoken
-            res.status(204).end();
-        } else {
-            res.status(404).end();
-        }
-    } catch (err) {
-        res.status(400).json(err);
-    }
+router.post('/logout', (req, res) => {
+    // to do do remove token from local storage in front end and redirect;
+    res.status(204).end()
+        .catch(errr => {
+            console.log("logout error: ", err);
+            res.status(400).json(err);
+        });
 });
 
 //put by id
