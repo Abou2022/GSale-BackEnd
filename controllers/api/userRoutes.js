@@ -1,41 +1,60 @@
-'use strict';
+"use strict";
 
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User, Profile } = require('../../models');
+const { User, Profile } = require("../../models");
+const bearerToken = require("../../lib/bearer-auth-middleware");
 
 // post
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
     try {
-        const message = !req.body.password ? 'expected a password'
-            : !req.body.email ? 'expected an email'
+        const message = !req.body.password
+            ? "expected a password"
+            : !req.body.email
+                ? "expected an email"
                 : null;
-        if (message)
-            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
+        if (message) return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const user = await User.create(req.body);
-        const profile = await Profile.create({ userId: user._id, email: user.email });
-        const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+        const profile = await Profile.create({
+            userId: user._id,
+            email: user.email,
+        });
+        const token = jwt.sign(
+            { userId: user._id, profileId: profile._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "2h" }
+        );
         res.json({ token, profile });
     } catch (err) {
         res.status(400).json(err);
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
-        const message = !req.body.password ? 'expected a password'
-            : !req.body.email ? 'expected an email'
+        const message = !req.body.password
+            ? "expected a password"
+            : !req.body.email
+                ? "expected an email"
                 : null;
-        if (message)
-            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const user = await User.findOne({ where: { email: req.body.email.toLowerCase() } });
+        if (message) return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
+        const user = await User.findOne({
+            where: { email: req.body.email.toLowerCase() },
+        });
         if (!user) {
-            return res.status(403).send("invalid credentials")
+            return res.status(403).send("invalid credentials");
         }
         const validPassword = await user.checkPassword(req.body.password);
         if (validPassword) {
-            const profile = await Profile.create({ userId: user._id, email: user.email });
-            const token = jwt.sign({ userId: user._id, profileId: profile._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+            const profile = await Profile.create({
+                userId: user._id,
+                email: user.email,
+            });
+            const token = jwt.sign(
+                { userId: user._id, profileId: profile._id },
+                process.env.JWT_SECRET,
+                { expiresIn: "2h" }
+            );
             res.json({ token, profile });
         } else {
             return res.status(403).send("invalid credentials");
@@ -45,17 +64,19 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', (req, res) => {
+router.post("/logout", (req, res) => {
     // to do do remove token from local storage on front end and redirect;
-    res.status(204).end()
-        .catch(errr => {
+    res
+        .status(204)
+        .end()
+        .catch((errr) => {
             console.log("logout error: ", err);
             res.status(400).json(err);
         });
 });
 
 //put by id
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         // to do check if the user on the pre hook is the old or the new
         // pre save probably new object
@@ -64,7 +85,9 @@ router.put('/:id', async (req, res) => {
             { $set: req.body },
             { runValidators: true, new: true }
         );
-        !user ? res.status(404).json({ message: 'No user with this id!' }) : res.json(user);
+        !user
+            ? res.status(404).json({ message: "No user with this id!" })
+            : res.json(user);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
@@ -72,10 +95,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // get by id
-router.get('/:id', async (req, res) => {
+router.get("/:id", bearerToken, async (req, res) => {
+    if (req.userId !== req.params.id) {
+        return res.status(403).json({ message: "not allowed" });
+    }
     try {
         const user = await User.findOne({ _id: req.params.id });
-        !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user);
+        !user ? res.status(404).json({ message: "No user with that ID" }) : res.json(user);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
