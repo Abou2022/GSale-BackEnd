@@ -53,6 +53,7 @@ GarageSaleEvent.init(
         },
         location: {
             type: DataTypes.TEXT,
+            // to do location required true
             // google geocoder, what to put here?
         },
         description: {
@@ -67,28 +68,7 @@ GarageSaleEvent.init(
             type: DataTypes.DATE,
             defaultValue: Date.now,
         },
-        // buyer_id: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "buyer",
-        //         key: "id",
-        //     },
-        // },
-        // seller_id: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "seller",
-        //         key: "id",
-        //     },
-        // },
-        messageBoard_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "messageBoard",
-                key: "id",
-                unique: false,
-            },
-        },
+        // to do array of enumerators, how to? syntax?
         categories: {
             type:
                 DataTypes.ENUM([
