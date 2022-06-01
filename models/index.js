@@ -11,7 +11,8 @@ const MessageBoard = require("./MessageBoard");
 // TO DO: buyer has many sellers, sellers have 0 buyers
 // todo: garagesaleEvent now has profileId field
 // seller has profileId field & garageSaleEventId field
-// to do: done delete garageSaleEvent_id, seller and buyer from profile
+// done: deleted garageSaleEvent_id, seller_id and buyer_id from profile &
+// deleted seller_id and buyer_id from garage sale event - is this a good way?
 
 User.hasOne(Profile, { foreignKey: "user_id", onDelete: "CASCADE" });
 Profile.belongsTo(User, { foreignKey: "user_id" });

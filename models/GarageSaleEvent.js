@@ -67,20 +67,20 @@ GarageSaleEvent.init(
             type: DataTypes.DATE,
             defaultValue: Date.now,
         },
-        buyer_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "buyer",
-                key: "id",
-            },
-        },
-        seller_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "seller",
-                key: "id",
-            },
-        },
+        // buyer_id: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "buyer",
+        //         key: "id",
+        //     },
+        // },
+        // seller_id: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "seller",
+        //         key: "id",
+        //     },
+        // },
         messageBoard_id: {
             type: DataTypes.INTEGER,
             references: {
