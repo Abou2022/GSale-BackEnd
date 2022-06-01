@@ -41,7 +41,6 @@ router.get('/email/:email', async (req, res) => {
     try {
         const data = await Profile.findOne({ where: { email: req.params.email }, include: { all: true } });
         data === null ? res.status(404).json({ message: 'No profile with this email!' }) : res.status(200).json(data);
-        // to do sort by date
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

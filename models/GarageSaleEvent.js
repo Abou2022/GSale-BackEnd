@@ -54,7 +54,7 @@ GarageSaleEvent.init(
         location: {
             type: DataTypes.TEXT,
             // to do location required true
-            // google geocodeId or lat lng, what to put here?
+            // google geocodeId or lat, what to put here?
         },
         description: {
             type: DataTypes.TEXT,
@@ -70,16 +70,14 @@ GarageSaleEvent.init(
         },
         // to do array of enumerators, how to? syntax?
         categories: {
-            type:
-                DataTypes.ENUM([
-                    "furniture",
-                    "kitchenware",
-                    "clothing",
-                    "electronic",
-                    "game",
-                    "sports equipment",
-                ],
-                )
+            type: DataTypes.ENUM([
+                "furniture",
+                "kitchenware",
+                "clothing",
+                "electronic",
+                "game",
+                "sports equipment",
+            ])
         },
     },
     {
