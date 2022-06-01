@@ -69,13 +69,17 @@ Seller.init(
                 "sports equipment",
             ])
         },
-        images: {
+        image: {
             type: DataTypes.STRING,
         },
         description: {
             type: DataTypes.STRING,
             required: true,
             allowNull: false,
+        },
+        createdOn: {
+            type: DataTypes.DATE,
+            defaultValue: Date.now,
         },
     },
     {

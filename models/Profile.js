@@ -55,8 +55,7 @@ Profile.init(
                     "electronic",
                     "game",
                     "sports equipment",
-                ],
-                )
+                ])
         }
     },
     {

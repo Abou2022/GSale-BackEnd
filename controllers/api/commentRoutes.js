@@ -6,7 +6,7 @@ const { Comment } = require("../../models");
 // get all
 router.get('/', async (req, res) => {
     try {
-        const data = await Comment.findAll({ include: { all: true } });
+        const data = await Comment.findAll({ include: { all: true }, order: [['createdOn', 'DESC']] });
         res.json(data);
     } catch (err) {
         console.log("err: ", err);
@@ -28,9 +28,8 @@ router.get('/:id', async (req, res) => {
 // get all comments by garageSaleEventId
 router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     try {
-        const data = await Comment.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true } });
+        const data = await Comment.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true }, order: [['createdOn', 'DESC']] });
         data === null ? res.status(404).json({ message: 'No comment with this garageSaleEventId!' }) : res.status(200).json(data);
-        // to do sort by date
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

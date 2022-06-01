@@ -6,7 +6,7 @@ const { Seller } = require("../../models");
 // get all
 router.get('/', async (req, res) => {
     try {
-        const data = await Seller.findAll({ include: { all: true } });
+        const data = await Seller.findAll({ include: { all: true }, order: [['createdOn', 'DESC']] });
         res.json(data);
     } catch (err) {
         console.log("err: ", err);
@@ -28,9 +28,8 @@ router.get('/:id', async (req, res) => {
 // get all sellers by garageSaleEventId
 router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     try {
-        const data = await Seller.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true } });
+        const data = await Seller.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true }, order: [['createdOn', 'DESC']] });
         data === null ? res.status(404).json({ message: 'No seller with this garageSaleEventId!' }) : res.status(200).json(data);
-        // to do sort by something
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

@@ -23,8 +23,7 @@ profile
   profile has 1 user, user has 1 profile
 
 to do: 
-    - figure out the cascading and updating of models
-    - authentication 
-    - build routes with current model architecture in place 
+    - authentication middleware with JWT for all put,delete, post (except for user profile)
     - build seeds for database
     - deploy backend
+    - syntax for array of enumerators (categories)
