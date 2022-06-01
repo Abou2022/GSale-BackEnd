@@ -41,9 +41,7 @@ Profile.init(
         },
         phoneNumber: {
             type: DataTypes.STRING,
-            // validate: {
-            //     isNumeric: true,
-            // },
+            // to validate w/ regex
         },
         imageURL: {
             type: DataTypes.STRING,
@@ -59,31 +57,7 @@ Profile.init(
                     "sports equipment",
                 ],
                 )
-        },
-        // garageSaleEvent_id: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "garageSaleEvent",
-        //         key: "id",
-        //         unique: false,
-        //     },
-        // },
-        // seller_id: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "seller",
-        //         key: "id",
-        //         unique: false,
-        //     },
-        // },
-        // buyer_id: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "buyer",
-        //         key: "id",
-        //         unique: false,
-        //     },
-        // },
+        }
     },
     {
         sequelize,

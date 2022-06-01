@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// get all by garage sale event id
+// get all sellers by garageSaleEventId
 router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     try {
         const data = await Seller.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true } });
@@ -38,6 +38,7 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
 });
 
 // to do filter by date/time/categories/and location
+
 // to do get by location
 
 // post
@@ -45,7 +46,6 @@ router.post('/', async (req, res) => {
     try {
         const data = await Seller.create(req.body);
         res.status(200).json(data);
-        // to do add: add the seller to the join table and the users profile
     } catch (err) {
         res.status(400).json(err);
     }
@@ -67,7 +67,6 @@ router.delete("/:id", async (req, res) => {
     try {
         const data = await Seller.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No seller with this id!' }) : res.json(data);
-        // to do remove: seller from garageSaleEvent and remove it from the profile
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

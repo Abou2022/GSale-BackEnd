@@ -4,6 +4,9 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const { User, Profile } = require('../../models');
 
+// to do: add jwt auth to majority of our routes
+// to do add auth/token auth
+
 // post
 router.post('/', async (req, res) => {
     try {
@@ -58,12 +61,12 @@ router.post('/logout', (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         // to do check if the user on the pre hook is the old or the new
+        // pre save probably new object
         const user = await User.findOneAndUpdate(
             { _id: req.params.id },
             { $set: req.body },
             { runValidators: true, new: true }
         );
-        // pre save probably new object
         !user ? res.status(404).json({ message: 'No user with this id!' }) : res.json(user);
     } catch (err) {
         console.log("err: ", err);
@@ -74,7 +77,7 @@ router.put('/:id', async (req, res) => {
 // get by id
 router.get('/:id', async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.userId });
+        const user = await User.findOne({ _id: req.params.id });
         !user ? res.status(404).json({ message: 'No user with that ID' }) : res.json(user);
     } catch (err) {
         console.log("err: ", err);

@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// get all by garage sale event id
+// get all comments by garageSaleEventId
 router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     try {
         const data = await Comment.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true } });
@@ -37,24 +37,17 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     }
 });
 
-// get all by messageBoard id
-router.get('/messageBoard/:messageBoardId', async (req, res) => {
-    try {
-        const data = await Comment.findAll({ where: { messageBoard_id: req.params.messageBoardId }, include: { all: true } });
-        data === null ? res.status(404).json({ message: 'No comment with this messageBoardId!' }) : res.status(200).json(data);
-                // to do sort by date
-    } catch (err) {
-        console.log("err: ", err);
-        res.status(500).json(err);
-    }
-});
-
 // post
 router.post('/', async (req, res) => {
     try {
+        const message = !req.body.profile_id ? 'expected a profile_id'
+            : !req.body.garageSaleEvent_id ? 'expected an garageSaleEvent_id'
+                : !req.body.content ? 'expected content'
+                    : null;
+        if (message)
+            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const data = await Comment.create(req.body);
         res.status(200).json(data);
-        // to do add: add the comment to the join table
     } catch (err) {
         res.status(400).json(err);
     }

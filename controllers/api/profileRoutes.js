@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// get by id
+// get a profile by profileId
 router.get('/:id', async (req, res) => {
     try {
         const data = await Profile.findByPk(req.params.id, { include: { all: true } });
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// get all by user id
+// get one by user id
 router.get('/user/:userId', async (req, res) => {
     try {
         const data = await Profile.findOne({ where: { user_id: req.params.userId }, include: { all: true } });
@@ -37,12 +37,12 @@ router.get('/user/:userId', async (req, res) => {
     }
 });
 
-// get all by email
+// get one by email
 router.get('/email/:email', async (req, res) => {
     try {
-        const data = await Profile.findAll({ where: { email: req.params.email }, include: { all: true } });
+        const data = await Profile.findOne({ where: { email: req.params.email }, include: { all: true } });
         data === null ? res.status(404).json({ message: 'No profile with this email!' }) : res.status(200).json(data);
-                // to do sort by date
+        // to do sort by date
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
@@ -52,6 +52,9 @@ router.get('/email/:email', async (req, res) => {
 // post
 router.post('/', async (req, res) => {
     try {
+        const message = !req.body.user_id ? 'expected a user_id' : null;
+        if (message)
+            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const data = await Profile.create(req.body);
         res.status(200).json(data);
     } catch (err) {
@@ -75,7 +78,6 @@ router.delete("/:id", async (req, res) => {
     try {
         const data = await Profile.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No profile with this id!' }) : res.json(data);
-        // to do remove: all associated buyers and sellers and comments,
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

@@ -3,6 +3,8 @@
 const router = require("express").Router();
 const { Buyer } = require("../../models");
 
+// to do add auth middleware
+
 // get all
 router.get('/', async (req, res) => {
     try {
@@ -25,11 +27,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// get all by garage sale event id
+// get all buyers by garageSaleEventId
 router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     try {
         const data = await Buyer.findAll({ where: { garageSaleEvent_id: req.params.garageSaleEventId }, include: { all: true } });
         data === null ? res.status(404).json({ message: 'No buyer with this garageSaleEventId!' }) : res.status(200).json(data);
+        // to do sort by something
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
@@ -39,9 +42,13 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
 // post
 router.post('/', async (req, res) => {
     try {
+        const message = !req.body.profile_id ? 'expected a profile_id'
+            : !req.body.garageSaleEvent_id ? 'expected an garageSaleEvent_id'
+                : null;
+        if (message)
+            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const data = await Buyer.create(req.body);
         res.status(200).json(data);
-        // to do add: buyer to garageSaleEvent
     } catch (err) {
         res.status(400).json(err);
     }

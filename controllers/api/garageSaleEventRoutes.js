@@ -31,9 +31,12 @@ router.get('/:id', async (req, res) => {
 // post
 router.post('/', async (req, res) => {
     try {
+        const message = !req.body.creator_id ? 'expected a creator_id' : null;
+        if (message)
+            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
+
         const data = await GarageSaleEvent.create(req.body);
         res.status(200).json(data);
-        // to do add: add the garageSaleEvent to the creators profile
     } catch (err) {
         res.status(400).json(err);
     }
