@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const routes = require('./routes'); //look for index.js in routes
+const routes = require('./controllers'); //look for index.js in routes
 // import sequelize connection
 const compression = require('compression');
 const cors = require("cors");
@@ -26,11 +26,14 @@ app.use(cors({
         }
     },
 }));
+
+const { Buyer, Comment, GarageSaleEvent, MessageBoard, Profile, Seller, User } = require("./models");
+
 app.use(routes);
 
 // sync sequelize models to the database, then turn on the server
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
-  });
+    app.listen(PORT, () => {
+        console.log(`App listening on port ${PORT}!`);
+    });
 });

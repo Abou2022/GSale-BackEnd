@@ -11,14 +11,14 @@ const MessageBoard = require("./MessageBoard");
 User.hasOne(Profile, { foreignKey: "user_id", onDelete: "CASCADE" });
 Profile.belongsTo(User, { foreignKey: "user_id" });
 
-User.hasMany(Comment);
+// User.hasMany(Comment);
 
 module.exports = {
-  Buyer,
-  Comment,
-  GarageSaleEvent,
-  MessageBoard,
-  Profile,
-  Seller,
-  User,
+    Buyer,
+    Comment,
+    GarageSaleEvent,
+    MessageBoard,
+    Profile,
+    Seller,
+    User,
 };
