@@ -3,7 +3,7 @@
 const router = require("express").Router();
 const { Buyer } = require("../../models");
 
-// to do add auth middleware
+// to do add auth middleware with JWT for the majority of routes, not just on this page
 
 // get all
 router.get('/', async (req, res) => {
@@ -70,7 +70,6 @@ router.delete("/:id", async (req, res) => {
     try {
         const data = await Buyer.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No buyer with this id!' }) : res.json(data);
-        // to do remove: buyer from garageSaleEvent
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

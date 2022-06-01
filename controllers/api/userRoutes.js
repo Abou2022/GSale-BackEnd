@@ -4,9 +4,6 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const { User, Profile } = require('../../models');
 
-// to do: add jwt auth to majority of our routes
-// to do add auth/token auth
-
 // post
 router.post('/', async (req, res) => {
     try {
@@ -49,7 +46,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-    // to do do remove token from local storage in front end and redirect;
+    // to do do remove token from local storage on front end and redirect;
     res.status(204).end()
         .catch(errr => {
             console.log("logout error: ", err);

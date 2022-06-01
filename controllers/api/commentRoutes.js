@@ -69,7 +69,6 @@ router.delete("/:id", async (req, res) => {
     try {
         const data = await Comment.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No comment with this id!' }) : res.json(data);
-        // to do remove: comment from garageSaleEvent
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
