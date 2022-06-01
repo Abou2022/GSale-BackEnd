@@ -54,7 +54,7 @@ GarageSaleEvent.init(
         location: {
             type: DataTypes.TEXT,
             // to do location required true
-            // google geocoder, what to put here?
+            // google geocodeId or lat lng, what to put here?
         },
         description: {
             type: DataTypes.TEXT,

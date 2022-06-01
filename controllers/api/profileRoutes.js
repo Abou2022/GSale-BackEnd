@@ -30,7 +30,6 @@ router.get('/user/:userId', async (req, res) => {
     try {
         const data = await Profile.findOne({ where: { user_id: req.params.userId }, include: { all: true } });
         data === null ? res.status(404).json({ message: 'No profile with this usertId!' }) : res.status(200).json(data);
-        // to do sort by date
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

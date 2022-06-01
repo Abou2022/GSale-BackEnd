@@ -37,7 +37,7 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     }
 });
 
-// to do filter by date/time/categories/and location
+// to do route that filters by date/time/categories/and location as req params
 
 // to do get by location
 
