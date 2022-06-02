@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require("express").Router();
-const { GarageSaleEvent, Vendor, Attendee, Comment } = require("../../models");
+const { Category, GarageSaleEvent, Vendor, Attendee, Comment } = require("../../models");
 
 // get all
 router.get('/', async (req, res) => {
@@ -46,7 +46,8 @@ router.post('/', async (req, res) => {
         const message = !req.body.creator_id ? 'expected a creator_id' : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-
+        const category = await Category.create();
+        req.body.category_id = category.id;
         const data = await GarageSaleEvent.create(req.body);
         res.status(200).json(data);
     } catch (err) {

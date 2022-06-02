@@ -2,7 +2,7 @@
 
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User, Profile } = require("../../models");
+const { User, Profile, Category } = require("../../models");
 const bearerToken = require("../../lib/bearer-auth-middleware");
 
 // post
@@ -14,16 +14,10 @@ router.post("/", async (req, res) => {
                 ? "expected an email"
                 : null;
         if (message) return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const user = await User.create(req.body);
-        const profile = await Profile.create({
-            userId: user._id,
-            email: user.email,
-        });
-        const token = jwt.sign(
-            { userId: user._id, profileId: profile._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "2h" }
-        );
+
+        const [user, category] = await Promise.all([await User.create(req.body), await Category.create()]);
+        const profile = await Profile.create({ user_id: user.id, category_id: category.id, email: user.email });
+        const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "2h" });
         res.json({ token, profile });
     } catch (err) {
         res.status(400).json(err);
@@ -38,23 +32,14 @@ router.post("/login", async (req, res) => {
                 ? "expected an email"
                 : null;
         if (message) return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const user = await User.findOne({
-            where: { email: req.body.email.toLowerCase() },
-        });
+        const user = await User.findOne({ where: { email: req.body.email.toLowerCase() } });
         if (!user) {
             return res.status(403).send("invalid credentials");
         }
         const validPassword = await user.checkPassword(req.body.password);
         if (validPassword) {
-            const profile = await Profile.create({
-                userId: user._id,
-                email: user.email,
-            });
-            const token = jwt.sign(
-                { userId: user._id, profileId: profile._id },
-                process.env.JWT_SECRET,
-                { expiresIn: "2h" }
-            );
+            const profile = await Profile.findOne({ where: { user_id: user.id }, include: { all: true } });
+            const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "2h" });
             res.json({ token, profile });
         } else {
             return res.status(403).send("invalid credentials");
@@ -66,9 +51,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", (req, res) => {
     // to do do remove token from local storage on front end and redirect;
-    res
-        .status(204)
-        .end()
+    res.status(204).end()
         .catch((errr) => {
             console.log("logout error: ", err);
             res.status(400).json(err);
@@ -85,9 +68,7 @@ router.put("/:id", async (req, res) => {
             { $set: req.body },
             { runValidators: true, new: true }
         );
-        !user
-            ? res.status(404).json({ message: "No user with this id!" })
-            : res.json(user);
+        !user ? res.status(404).json({ message: "No user with this id!" }) : res.json(user);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
