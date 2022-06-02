@@ -10,7 +10,7 @@ const vendorRoutes = require('./vendorRoutes');
 
 router.use('/attendees', attendeeRoutes);
 router.use('/comments', commentRoutes);
-router.use('/garageSaleEvent', garageSaleEventRoutes);
+router.use('/garageSaleEvents', garageSaleEventRoutes);
 router.use('/items', itemRoutes);
 router.use('/profiles', profileRoutes);
 router.use('/users', userRoutes);
