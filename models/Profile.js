@@ -23,6 +23,14 @@ Profile.init(
                 unique: false,
             },
         },
+        category_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "category",
+                key: "id",
+                unique: false,
+            },
+        },
         email: {
             type: DataTypes.STRING,
             unique: true,
@@ -46,17 +54,6 @@ Profile.init(
         imageURL: {
             type: DataTypes.STRING,
         },
-        categories: {
-            type:
-                DataTypes.ENUM([
-                    "furniture",
-                    "kitchenware",
-                    "clothing",
-                    "electronic",
-                    "game",
-                    "sports equipment",
-                ])
-        }
     },
     {
         sequelize,

@@ -4,9 +4,9 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require("../config/connection");
 
-class Buyer extends Model { }
+class Attendee extends Model { }
 
-Buyer.init(
+Attendee.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -30,14 +30,6 @@ Buyer.init(
                 unique: false,
             },
         },
-        seller_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "seller",
-                key: "id",
-                unique: false,
-            },
-        },
         createdOn: {
             type: DataTypes.DATE,
             defaultValue: Date.now,
@@ -48,8 +40,8 @@ Buyer.init(
         timestamps: false,
         freezeTableName: true,
         // underscored: true,
-        modelName: "buyer",
+        modelName: "attendee",
     }
 );
 
-module.exports = Buyer;
+module.exports = Attendee;

@@ -27,7 +27,7 @@ app.use(cors({
     },
 }));
 
-const { Buyer, Comment, GarageSaleEvent, MessageBoard, Profile, Seller, User } = require("./models");
+const { Attendee, Category, Comment, GarageSaleEvent, Item, Profile, User, Vendor } = require("./models");
 
 app.use(routes);
 

@@ -4,9 +4,9 @@ const { Model, DataTypes } = require("sequelize");
 
 const sequelize = require("../config/connection");
 
-class Seller extends Model { }
+class Vendor extends Model { }
 
-Seller.init(
+Vendor.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -34,18 +34,26 @@ Seller.init(
             required: true,
             allowNull: false,
         },
+        category_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "category",
+                key: "id",
+                unique: false,
+            },
+        },
         address: {
             type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
-        endTime: {
-            type: DataTypes.TIME,
+        startTime: {
+            type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
-        startTime: {
-            type: DataTypes.TIME,
+        endTime: {
+            type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
@@ -58,16 +66,6 @@ Seller.init(
             type: DataTypes.DATE,
             required: true,
             allowNull: false,
-        },
-        categories: {
-            type: DataTypes.ENUM([
-                "furniture",
-                "kitchenware",
-                "clothing",
-                "electronic",
-                "game",
-                "sports equipment",
-            ])
         },
         image: {
             type: DataTypes.STRING,
@@ -87,8 +85,8 @@ Seller.init(
         timestamps: false,
         freezeTableName: true,
         // underscored: true,
-        modelName: "seller",
+        modelName: "vendor",
     }
 );
 
-module.exports = Seller;
+module.exports = Vendor;
