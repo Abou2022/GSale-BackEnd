@@ -1,8 +1,8 @@
 "use strict";
 
-const { User } = require('../models');
+const { Profile } = require('../models');
 
-const userData = [
+const profileData = [
     {
         user_id: 1,
         category_id: 1,
@@ -30,6 +30,6 @@ const userData = [
       },
 ];
 
-const seedUsers = () => User.bulkCreate(userData, { individualHooks: true });
+const seedProfiles = () => Profile.bulkCreate(profileData);
 
-module.exports = seedUsers;
+module.exports = seedProfiles;
