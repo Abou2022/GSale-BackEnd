@@ -77,9 +77,9 @@ router.put("/:id", async (req, res) => {
 
 // get by id
 router.get("/:id", bearerToken, async (req, res) => {
-    if (req.userId !== req.params.id) {
-        return res.status(403).json({ message: "not allowed" });
-    }
+    // if (req.userId !== req.params.id) {
+    //     return res.status(403).json({ message: "not allowed" });
+    // }
     try {
         const user = await User.findOne({ _id: req.params.id });
         !user ? res.status(404).json({ message: "No user with that ID" }) : res.json(user);
