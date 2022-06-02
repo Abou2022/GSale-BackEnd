@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require("express").Router();
-const { Vendor } = require("../../models");
+const { Category, Vendor } = require("../../models");
 
 // get all
 router.get('/', async (req, res) => {
@@ -37,12 +37,13 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
 });
 
 // to do route that filters by date/time/categories/and location as req params
-
 // to do get by location
 
 // post
 router.post('/', async (req, res) => {
     try {
+        const category = await Category.create();
+        req.body.category_id = category.id;
         const data = await Vendor.create(req.body);
         res.status(200).json(data);
     } catch (err) {
