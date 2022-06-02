@@ -57,7 +57,7 @@ GarageSaleEvent.init(
         },
         createdOn: {
             type: DataTypes.DATE,
-            defaultValue: Date.now,
+            defaultValue: DataTypes.NOW,
         },
         location: {
             type: DataTypes.STRING,
@@ -74,7 +74,7 @@ GarageSaleEvent.init(
         },
         createdOn: {
             type: DataTypes.DATE,
-            defaultValue: Date.now,
+            defaultValue: DataTypes.NOW,
         },
     },
     {
