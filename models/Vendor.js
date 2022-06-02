@@ -77,7 +77,7 @@ Vendor.init(
         },
         createdOn: {
             type: DataTypes.DATE,
-            defaultValue: Date.now,
+            defaultValue: DataTypes.NOW,
         },
     },
     {
