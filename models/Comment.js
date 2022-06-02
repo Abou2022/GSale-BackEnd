@@ -22,6 +22,14 @@ Comment.init(
                 unique: false,
             },
         },
+        garageSaleEvent_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "garageSaleEvent",
+                key: "id",
+                unique: false,
+            },
+        },
         content: {
             type: DataTypes.TEXT,
             required: true,
@@ -31,14 +39,6 @@ Comment.init(
             type: DataTypes.DATE,
             defaultValue: Date.now,
         },
-        garageSaleEvent_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "garageSaleEvent",
-                key: "id",
-                unique: false,
-            },
-        }
     },
     {
         sequelize,

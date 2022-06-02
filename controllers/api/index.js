@@ -1,17 +1,17 @@
 const router = require('express').Router();
 
-const buyerRoutes = require('./buyerRoutes');
+const attendeeRoutes = require('./attendeeRoutes');
 const commentRoutes = require('./commentRoutes');
 const garageSaleEventRoutes = require('./garageSaleEventRoutes');
 const profileRoutes = require('./profileRoutes');
-const sellerRoutes = require('./sellerRoutes');
+const vendorRoutes = require('./vendorRoutes');
 const userRoutes = require('./userRoutes');
 
-router.use('/buyers', buyerRoutes);
+router.use('/attendees', attendeeRoutes);
 router.use('/comments', commentRoutes);
 router.use('/garageSaleEvent', garageSaleEventRoutes);
 router.use('/profiless', profileRoutes);
-router.use('/sellers', sellerRoutes);
+router.use('/vendors', vendorRoutes);
 router.use('/users', userRoutes);
 
 module.exports = router;

@@ -1,13 +1,13 @@
 "use strict";
 
 const router = require("express").Router();
-const { GarageSaleEvent, Seller, Buyer, Comment } = require("../../models");
+const { GarageSaleEvent, Vendor, Attendee, Comment } = require("../../models");
 
 // get all
 router.get('/', async (req, res) => {
     try {
         const data = await GarageSaleEvent.findAll({ include: { all: true } });
-        // to do get, buyers and sellers for each garage sale event
+        // to do get, attendees and vendors for each garage sale event
         res.json(data);
     } catch (err) {
         console.log("err: ", err);
@@ -18,18 +18,18 @@ router.get('/', async (req, res) => {
 // get by id
 router.get('/:id', async (req, res) => {
     try {
-        const [garageSaleEvent, buyer, seller, comment] = await Promise.all([
+        const [garageSaleEvent, attendee, vendor, comment] = await Promise.all([
             GarageSaleEvent.findByPk(req.params.id, { include: { all: true } }),
-            Buyer.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } }),
-            Seller.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } }),
+            Attendee.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } }),
+            Vendor.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } }),
             Comment.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } })
         ]);
-        garageSaleEvent === null ? 
-            res.status(404).json({ message: 'No garageSaleEvent with this id!' }) : 
-                res.status(200).json({ garageSaleEvent, buyer, seller, comment });
+        garageSaleEvent === null ?
+            res.status(404).json({ message: 'No garageSaleEvent with this id!' }) :
+            res.status(200).json({ garageSaleEvent, attendee, vendor, comment });
         // const garageSaleEvent = await GarageSaleEvent.findByPk(req.params.id, { include: { all: true } });
-        // const buyer = await Buyer.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } });
-        // const seller = await Seller.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } });
+        // const attendee = await Attendee.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } });
+        // const vendor = await Vendor.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } });
         // const comment = await Comment.findAll({ where: { garageSaleEvent_id: req.params.id }, include: { all: true } });
     } catch (err) {
         console.log("err: ", err);

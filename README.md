@@ -1,13 +1,13 @@
 # GSale-BackEnd
 
-buyer
-  profile has many buyers and buyer has 1 profile 
-  garage sale event has many buyers and buyer has 1 gse 
-  TO DO: buyer has many sellers, sellers have 0 buyers
+attendee
+  profile has many attendees and attendee has 1 profile 
+  garage sale event has many attendees and attendee has 1 gse 
+  TO DO: attendee has many vendors, vendors have 0 attendees
 
-seller 
-  profile has many seller, seller has 1 profile 
-  gse has many seller, seller has 1 gse 
+vendor 
+  profile has many vendor, vendor has 1 profile 
+  gse has many vendor, vendor has 1 gse 
 
 comment 
   comment has 1 profile, profile has manny comments 
@@ -23,7 +23,5 @@ profile
   profile has 1 user, user has 1 profile
 
 to do: 
-    - authentication middleware with JWT for all put,delete, post (except for user profile)
     - build seeds for database
     - deploy backend
-    - syntax for array of enumerators (categories)

@@ -14,18 +14,34 @@ GarageSaleEvent.init(
             primaryKey: true,
             autoIncrement: true,
         },
+        profile_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "profile",
+                key: "id",
+                unique: false,
+            },
+        },
+        category_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "category",
+                key: "id",
+                unique: false,
+            },
+        },
         eventName: {
             type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
-        endTime: {
-            type: DataTypes.DATE,
+        startTime: {
+            type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
-        startTime: {
-            type: DataTypes.DATE,
+        endTime: {
+            type: DataTypes.STRING,
             required: true,
             allowNull: false,
         },
@@ -43,16 +59,8 @@ GarageSaleEvent.init(
             type: DataTypes.DATE,
             defaultValue: Date.now,
         },
-        creator_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "profile",
-                key: "id",
-                unique: false,
-            },
-        },
         location: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             // to do location required true
             // google geocodeId or lat, what to put here?
         },
@@ -67,17 +75,6 @@ GarageSaleEvent.init(
         createdOn: {
             type: DataTypes.DATE,
             defaultValue: Date.now,
-        },
-        // to do array of enumerators, how to? syntax?
-        categories: {
-            type: DataTypes.ENUM([
-                "furniture",
-                "kitchenware",
-                "clothing",
-                "electronic",
-                "game",
-                "sports equipment",
-            ])
         },
     },
     {
