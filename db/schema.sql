@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS gsale_db;
+CREATE DATABASE gsale_db;
