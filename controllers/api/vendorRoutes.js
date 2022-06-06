@@ -2,6 +2,7 @@
 
 const router = require("express").Router();
 const { Category, Vendor } = require("../../models");
+const bearerToken = require("../../lib/bearer-auth-middleware");
 
 // get all
 router.get('/', async (req, res) => {
@@ -40,7 +41,7 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
 // to do get by location
 
 // post
-router.post('/', async (req, res) => {
+router.post('/', bearerToken, async (req, res) => {
     try {
         const category = await Category.create();
         req.body.category_id = category.id;
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => {
 });
 
 //put by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', bearerToken, async (req, res) => {
     try {
         const data = await Vendor.update(req.body, { where: { id: req.params.id } });
         data[0] === 0 ? res.status(404).json({ message: 'No vendor with this id!' }) : res.status(200).json(data);
@@ -63,7 +64,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete by id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", bearerToken, async (req, res) => {
     try {
         const data = await Vendor.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No vendor with this id!' }) : res.json(data);

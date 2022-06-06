@@ -2,6 +2,7 @@
 
 const router = require("express").Router();
 const { Category, GarageSaleEvent, Vendor, Attendee, Comment } = require("../../models");
+const bearerToken = require("../../lib/bearer-auth-middleware");
 
 // get all
 router.get('/', async (req, res) => {
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
 
 
 // post
-router.post('/', async (req, res) => {
+router.post('/', bearerToken, async (req, res) => {
     try {
         const message = !req.body.creator_id ? 'expected a creator_id' : null;
         if (message)
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
 });
 
 //put by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', bearerToken, async (req, res) => {
     try {
         const data = await GarageSaleEvent.update(req.body, { where: { id: req.params.id } });
         data[0] === 0 ? res.status(404).json({ message: 'No garageSaleEvent with this id!' }) : res.status(200).json(data);
@@ -67,7 +68,7 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete by id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", bearerToken, async (req, res) => {
     try {
         const data = await GarageSaleEvent.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No garageSaleEvent with this id!' }) : res.json(data);
