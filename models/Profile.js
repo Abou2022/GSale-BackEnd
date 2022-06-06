@@ -17,6 +17,7 @@ Profile.init(
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            required: true,
             references: {
                 model: "user",
                 key: "id",
@@ -25,6 +26,7 @@ Profile.init(
         },
         category_id: {
             type: DataTypes.INTEGER,
+            required: true,
             references: {
                 model: "category",
                 key: "id",
