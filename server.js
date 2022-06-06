@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true })); //allows other url encoding
 
 app.use(compression());
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = [process.env.WHITELIST, 'http://localhost:3000'];
 app.use(cors({
     credentials: true,
     origin: (origin, cb) => {
