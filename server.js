@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true })); //allows other url encoding
 
 app.use(compression());
 
-const whitelist = [process.env.WHITELIST, 'http://localhost:3000'];
+const whitelist = [process.env.WHITELIST, 'http://localhost:3000', 'https://gsalefrontend.herokuapp.com/', 'https://gsalefrontend.herokuapp.com','http://localhost:3000', 'https://www.gsalefrontend.herokuapp.com/', 'https://www.gsalefrontend.herokuapp.com'];
 app.use(cors({
     credentials: true,
     origin: (origin, cb) => {
