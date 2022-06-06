@@ -49,18 +49,37 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// token signin, validates token and keeps users signedin
+router.get("/token/login", bearerToken, async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.userId });
+        if (!user) {
+            return res.status(404).json({ message: "No user with that ID" });
+        } else {
+            const profile = await Profile.findOne({ where: { user_id: user.id }, include: { all: true } });
+            const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+            res.json({ token, profile });
+        }
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
+
 router.post("/logout", (req, res) => {
     // to do do remove token from local storage on front end and redirect;
     res.status(204).end()
-        .catch((errr) => {
+        .catch((err) => {
             console.log("logout error: ", err);
             res.status(400).json(err);
         });
 });
 
 //put by id
-router.put("/:id", async (req, res) => {
+router.put("/:id", bearerToken, async (req, res) => {
     try {
+        if (req.userId !== req.params.id) {
+            return res.status(403).json({ message: "not allowed" });
+        }
         // to do check if the user on the pre hook is the old or the new
         // pre save probably new object
         const user = await User.findOneAndUpdate(
@@ -77,10 +96,10 @@ router.put("/:id", async (req, res) => {
 
 // get by id
 router.get("/:id", bearerToken, async (req, res) => {
-    // if (req.userId !== req.params.id) {
-    //     return res.status(403).json({ message: "not allowed" });
-    // }
     try {
+        if (req.userId !== req.params.id) {
+            return res.status(403).json({ message: "not allowed" });
+        }
         const user = await User.findOne({ _id: req.params.id });
         !user ? res.status(404).json({ message: "No user with that ID" }) : res.json(user);
     } catch (err) {
