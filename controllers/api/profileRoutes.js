@@ -2,6 +2,7 @@
 
 const router = require("express").Router();
 const { Profile } = require("../../models");
+const bearerToken = require("../../lib/bearer-auth-middleware");
 
 // get all
 router.get('/', async (req, res) => {
@@ -48,7 +49,7 @@ router.get('/email/:email', async (req, res) => {
 });
 
 // post
-router.post('/', async (req, res) => {
+router.post('/', bearerToken, async (req, res) => {
     try {
         const message = !req.body.user_id ? 'expected a user_id' : null;
         if (message)
@@ -61,8 +62,11 @@ router.post('/', async (req, res) => {
 });
 
 //put by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', bearerToken, async (req, res) => {
     try {
+        if (req.profileId !== req.params.id) {
+            return res.status(403).json({ message: "not allowed" });
+        }
         const data = await Profile.update(req.body, { where: { id: req.params.id } });
         data[0] === 0 ? res.status(404).json({ message: 'No profile with this id!' }) : res.status(200).json(data);
     } catch (err) {
@@ -72,8 +76,11 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete by id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", bearerToken, async (req, res) => {
     try {
+        if (req.profileId !== req.params.id) {
+            return res.status(403).json({ message: "not allowed" });
+        }
         const data = await Profile.destroy({ where: { id: req.params.id } });
         data === 0 ? res.status(404).json({ message: 'No profile with this id!' }) : res.json(data);
     } catch (err) {
