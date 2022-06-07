@@ -43,6 +43,14 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
 // post
 router.post('/', bearerToken, async (req, res) => {
     try {
+        const message = !req.body.description ? 'expected a description'
+            : !req.body.address ? 'expected an address'
+                : !req.body.zip ? 'expected an zip'
+                    : !req.body.lat ? 'expected an lat'
+                        : !req.body.lng ? 'expected an lng'
+                            : null;
+        if (message)
+            return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const category = await Category.create();
         req.body.category_id = category.id;
         const data = await Vendor.create(req.body);

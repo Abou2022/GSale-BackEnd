@@ -47,6 +47,21 @@ Vendor.init(
             required: true,
             allowNull: false,
         },
+        zip: {
+            type: DataTypes.INTEGER(5),
+            required: true,
+            allowNull: false,
+        },
+        lat: {
+            type: DataTypes.FLOAT(10,6),
+            required: true,
+            allowNull: false,
+        },
+        lng: {
+            type: DataTypes.FLOAT(10,6),
+            required: true,
+            allowNull: false,
+        },
         startTime: {
             type: DataTypes.STRING,
             required: true,
