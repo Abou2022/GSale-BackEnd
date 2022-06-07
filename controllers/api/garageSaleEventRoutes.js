@@ -44,7 +44,12 @@ router.get('/:id', async (req, res) => {
 // post
 router.post('/', bearerToken, async (req, res) => {
     try {
-        const message = !req.body.creator_id ? 'expected a creator_id' : null;
+        const message = !req.body.creator_id ? 'expected a creator_id' 
+                : !req.body.address ? 'expected an address'
+                    : !req.body.zip ? 'expected an zip'
+                        : !req.body.lat ? 'expected an lat'
+                            : !req.body.lng ? 'expected an lng'
+                                : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const category = await Category.create();

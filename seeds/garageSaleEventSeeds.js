@@ -12,6 +12,10 @@ const garageSaleEventData = [
         startDate: "2022-06-13 00:00:00",
         endDate: "2022-06-14 00:00:00",
         description: "We are moving!",
+        address: "1105 Spring Street UNIT 1101, Seattle, WA 98104",
+        zip: 98104,
+        lat: 47.609973,
+        lng: -122.325261,
     },
     {
         profile_id: 2,
@@ -22,6 +26,10 @@ const garageSaleEventData = [
         startDate: "2022-06-15 00:00:00",
         endDate: "2022-06-15 00:00:00",
         description: "We are moving!",
+        address: "2113 Grand Avenue, Everett, WA 98201",
+        zip: 98201,
+        lat: 47.989005,
+        lng: -122.179804,
     },
     {
         profile_id: 3,
@@ -32,6 +40,10 @@ const garageSaleEventData = [
         startDate: "2022-06-16 00:00:00",
         endDate: "2022-06-18 00:00:00",
         description: "We are moving!",
+        address: "19411 56th Avenue W UNIT 316, Lynnwood, WA 98036",
+        zip: 98036,
+        lat: 47.822691,
+        lng: -122.307329,
     },
     {
         profile_id: 4,
@@ -42,6 +54,10 @@ const garageSaleEventData = [
         startDate: "2022-06-19 00:00:00",
         endDate: "2022-06-20 00:00:00",
         description: "We are moving!",
+        address: "6333 Lake Washington Boulevard NE UNIT 201, Kirkland, WA 98033",
+        zip: 98033,
+        lat: 47.663182,
+        lng: -122.207675,
     },
     {
         profile_id: 5,
@@ -52,6 +68,10 @@ const garageSaleEventData = [
         startDate: "2022-06-20 00:00:00",
         endDate: "2022-06-20 00:00:00",
         description: "We are moving!",
+        address: "26921 40th Avenue S, Kent, WA 98032",
+        zip: 98032,
+        lat: 47.359933,
+        lng: -122.284175,
     },
 
 ];

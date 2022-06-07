@@ -59,10 +59,25 @@ GarageSaleEvent.init(
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
-        location: {
+        address: {
             type: DataTypes.STRING,
-            // to do location required true
-            // google geocodeId or lat, what to put here?
+            required: true,
+            allowNull: false,
+        },
+        zip: {
+            type: DataTypes.INTEGER(5),
+            required: true,
+            allowNull: false,
+        },
+        lat: {
+            type: DataTypes.FLOAT(10,6),
+            required: true,
+            allowNull: false,
+        },
+        lng: {
+            type: DataTypes.FLOAT(10,6),
+            required: true,
+            allowNull: false,
         },
         description: {
             type: DataTypes.TEXT,
