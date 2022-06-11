@@ -19,7 +19,7 @@ const whitelist = [process.env.WHITELIST, 'http://localhost:3000', 'https://gsal
 app.use(cors({
     credentials: true,
     origin: (origin, cb) => {
-        if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
+        if (whitelist.indexOf(origin) != -1 || origin === undefined) {
             cb(null, true);
         } else {
             cb(new Error(`${origin} Not allowed by CORS`));
