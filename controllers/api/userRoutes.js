@@ -66,7 +66,6 @@ router.get("/token/login", bearerAuth, async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-    // to do do remove token from local storage on front end and redirect;
     res.status(204).end()
         .catch((err) => {
             console.log("logout error: ", err);
@@ -80,8 +79,6 @@ router.put("/:id", bearerAuth, async (req, res) => {
         if (req.userId != req.params.id) {
             return res.status(403).json({ message: "not allowed" });
         }
-        // to do check if the user on the pre hook is the old or the new
-        // pre save probably new object
         const user = await User.findOneAndUpdate(
             { id: req.params.id },
             { $set: req.body },

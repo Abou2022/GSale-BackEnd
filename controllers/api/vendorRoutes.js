@@ -37,18 +37,17 @@ router.get('/garageSaleEvent/:garageSaleEventId', async (req, res) => {
     }
 });
 
-// to do route that filters by date/time/categories/and location as req params
-// to do get by location
-
 // post
 router.post('/', bearerAuth, async (req, res) => {
     try {
-        const message = !req.body.description ? 'expected a description'
-            : !req.body.address ? 'expected an address'
-                : !req.body.zip ? 'expected an zip'
-                    : !req.body.lat ? 'expected an lat'
-                        : !req.body.lng ? 'expected an lng'
-                            : null;
+        req.body.profile_id = req.profileId
+        const message = !req.body.address ? 'expected an address'
+            : !req.body.description ? 'expected a description'
+                : !req.body.endDate ? 'expected a endDate'
+                    : !req.body.startDate ? 'expected a startDate'
+                        : !req.body.lat ? 'expected an lat'
+                            : !req.body.lng ? 'expected an lng'
+                                : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
         const category = await Category.create();
