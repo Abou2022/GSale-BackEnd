@@ -88,9 +88,11 @@ router.get('/:id', async (req, res) => {
 // post
 router.post('/', bearerAuth, async (req, res) => {
     try {
-        const message = !req.body.creator_id ? 'expected a creator_id'
-            : !req.body.address ? 'expected an address'
-                : !req.body.zip ? 'expected an zip'
+        req.body.profile_id = req.profileId
+        const message = !req.body.address ? 'expected an address'
+            : !req.body.description ? 'expected a description'
+            : !req.body.endDate ? 'expected a endDate'
+            : !req.body.startDate ? 'expected a startDate'
                     : !req.body.lat ? 'expected an lat'
                         : !req.body.lng ? 'expected an lng'
                             : null;
