@@ -64,10 +64,9 @@ router.post('/', bearerAuth, async (req, res) => {
                                 : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const categories = req.body.categories ? req.body.categories : {};
-        const category = await Category.create(categories);
+        let category = await Category.create(req.body.category);
         req.body.category_id = category.id;
-        const vendor = await Vendor.create(req.body);
+        let vendor = await Vendor.create(req.body);
         if (req.body.items && req.body.items.length) {
             console.log("req.body.items: ", req.body.items);
             let itemsArray = req.body.items.map(item => {
@@ -81,7 +80,7 @@ router.post('/', bearerAuth, async (req, res) => {
         } else {
             vendor.items = [];
         }
-        res.status(200).json(vendor);
+        res.status(200).json({vendor, category});
     } catch (err) {
         console.log("err: ", err);
         res.status(400).json(err);
@@ -92,6 +91,7 @@ router.post('/', bearerAuth, async (req, res) => {
 router.put('/:id', bearerAuth, async (req, res) => {
     try {
         const data = await Vendor.update(req.body, { where: { id: req.params.id } });
+        await Category.update(req.body.category, { where: { id: req.body.category.id } });
         console.log("data: ", data);
         if (req.body.items && req.body.items.length) {
             console.log("req.body.items: ", req.body.items);

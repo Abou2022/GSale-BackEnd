@@ -46,11 +46,11 @@ router.post('/', bearerAuth, async (req, res) => {
                                 : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const categories = req.body.categories ? req.body.categories : {}; 
+        const categories = req.body.category ? req.body.category : {}; 
         const category = await Category.create(categories);
         req.body.category_id = category.id;
-        const data = await GarageSaleEvent.create(req.body);
-        res.status(200).json(data);
+        const garageSaleEvent = await GarageSaleEvent.create(req.body);
+        res.status(200).json({garageSaleEvent, category});
     } catch (err) {
         res.status(400).json(err);
     }
@@ -60,6 +60,7 @@ router.post('/', bearerAuth, async (req, res) => {
 router.put('/:id', bearerAuth, async (req, res) => {
     try {
         const data = await GarageSaleEvent.update(req.body, { where: { id: req.params.id } });
+        await Category.update(req.body.category, { where: { id: req.body.category.id } });
         data[0] === 0 ? res.status(404).json({ message: 'No garageSaleEvent with this id!' }) : res.status(200).json(data);
     } catch (err) {
         console.log("err: ", err);
