@@ -47,11 +47,6 @@ Vendor.init(
             required: true,
             allowNull: false,
         },
-        zip: {
-            type: DataTypes.INTEGER(5),
-            required: true,
-            allowNull: false,
-        },
         lat: {
             type: DataTypes.FLOAT(10,6),
             required: true,
@@ -81,9 +76,6 @@ Vendor.init(
             type: DataTypes.DATE,
             required: true,
             allowNull: false,
-        },
-        image: {
-            type: DataTypes.STRING,
         },
         description: {
             type: DataTypes.STRING,

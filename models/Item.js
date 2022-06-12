@@ -36,8 +36,8 @@ Item.init(
         },
         imageDescription: {
             type: DataTypes.TEXT,
+            required: true,
         },
-
     },
     {
         sequelize,

@@ -44,17 +44,21 @@ Profile.init(
         },
         firstName: {
             type: DataTypes.STRING,
+            allowNull: true,
             // required: true,
         },
         lastName: {
             type: DataTypes.STRING,
+            allowNull: true,
         },
         phoneNumber: {
             type: DataTypes.STRING,
+            allowNull: true,
             // to validate w/ regex
         },
         imageURL: {
             type: DataTypes.STRING,
+            allowNull: true,
         },
     },
     {

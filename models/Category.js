@@ -14,10 +14,6 @@ Category.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        antiques: {
-            type:DataTypes.BOOLEAN,
-            defaultValue: false
-        },
         babyAndKid: {
             type:DataTypes.BOOLEAN,
             defaultValue: false
@@ -30,7 +26,7 @@ Category.init(
             type:DataTypes.BOOLEAN,
             defaultValue: false
         },
-        farmAndGarden: {
+        bath: {
             type:DataTypes.BOOLEAN,
             defaultValue: false
         },
@@ -42,7 +38,7 @@ Category.init(
             type:DataTypes.BOOLEAN,
             defaultValue: false
         },
-        moviesBooksAndMusic: {
+        pet: {
             type:DataTypes.BOOLEAN,
             defaultValue: false
         },
