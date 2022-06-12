@@ -91,14 +91,15 @@ router.post('/', bearerAuth, async (req, res) => {
 router.put('/:id', bearerAuth, async (req, res) => {
     try {
         const data = await Vendor.update(req.body, { where: { id: req.params.id } });
-        await Category.update(req.body.category, { where: { id: req.body.category.id } });
+        const categoryData = await Category.update(req.body.category, { where: { id: req.body.category.id } });
+        let itemsArray = [0];
         console.log("data: ", data);
         if (req.body.items && req.body.items.length) {
             console.log("req.body.items: ", req.body.items);
-            const itemsArray = await Item.bulkCreate(req.body.items, { updateOnDuplicate: ["imageURL", "imageDescription"] });
+            itemsArray = await Item.bulkCreate(req.body.items, { updateOnDuplicate: ["imageURL", "imageDescription"] });
             console.log("itemsArray: ", itemsArray);
         }
-        data[0] === 0 ? res.status(404).json({ message: 'No vendor with this id!' }) : res.status(200).json(data);
+        data[0] === 0 && categoryData[0] === 0 && itemsArray[0] === 0 ? res.status(404).json({ message: 'No vendor with this id! || No new data to update' }) : res.status(200).json(data);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

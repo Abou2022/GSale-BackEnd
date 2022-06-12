@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
         const [user, category] = await Promise.all([await User.create(req.body), await Category.create()]);
         const profile = await Profile.create({ user_id: user.id, category_id: category.id, email: user.email });
         const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "8h" });
-        res.json({ token, profile });
+        res.json({ token, profile, category });
     } catch (err) {
         res.status(400).json(err);
     }
@@ -37,10 +37,11 @@ router.post("/login", async (req, res) => {
             return res.status(403).send("invalid credentials");
         }
         const validPassword = await user.checkPassword(req.body.password);
-        if (validPassword) {
+        if (validPassword) { 
             const profile = await Profile.findOne({ where: { user_id: user.id }, include: { all: true } });
+            const category = await Category.findByPk(profile.category_id);
             const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "8h" });
-            res.json({ token, profile });
+            res.json({ token, profile, category });
         } else {
             return res.status(403).send("invalid credentials");
         }
@@ -57,8 +58,9 @@ router.get("/token/login", bearerAuth, async (req, res) => {
             return res.status(404).json({ message: "No user with that ID" });
         } else {
             const profile = await Profile.findOne({ where: { user_id: user.id }, include: { all: true } });
+            const category = await Category.findByPk(profile.category_id);
             const token = jwt.sign({ userId: user.id, profileId: profile.id }, process.env.JWT_SECRET, { expiresIn: "8h" });
-            res.json({ token, profile });
+            res.json({ token, profile, category });
         }
     } catch (err) {
         res.status(400).json(err);

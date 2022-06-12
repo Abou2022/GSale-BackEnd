@@ -60,8 +60,8 @@ router.post('/', bearerAuth, async (req, res) => {
 router.put('/:id', bearerAuth, async (req, res) => {
     try {
         const data = await GarageSaleEvent.update(req.body, { where: { id: req.params.id } });
-        await Category.update(req.body.category, { where: { id: req.body.category.id } });
-        data[0] === 0 ? res.status(404).json({ message: 'No garageSaleEvent with this id!' }) : res.status(200).json(data);
+        const categoryData = await Category.update(req.body.category, { where: { id: req.body.category.id } });
+        data[0] === 0 && categoryData[0] === 0 ? res.status(404).json({ message: 'No garageSaleEvent with this id! || No new data to update' }) : res.status(200).json(data);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);

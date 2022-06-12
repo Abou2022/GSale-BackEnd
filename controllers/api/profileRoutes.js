@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require("express").Router();
-const { Profile } = require("../../models");
+const { Profile, Category } = require("../../models");
 const bearerAuth = require("../../lib/bearer-auth-middleware");
 
 // get all
@@ -68,7 +68,8 @@ router.put('/:id', bearerAuth, async (req, res) => {
             return res.status(403).json({ message: "not allowed" });
         }
         const data = await Profile.update(req.body, { where: { id: req.params.id } });
-        data[0] === 0 ? res.status(404).json({ message: 'No profile with this id!' }) : res.status(200).json(data);
+        const categoryData = await Category.update(req.body.category, { where: { id: req.body.category.id } });
+        data[0] === 0 && categoryData[0] === 0 ? res.status(404).json({ message: 'No profile with this id! || No new data to update' }) : res.status(200).json(data);
     } catch (err) {
         console.log("err: ", err);
         res.status(500).json(err);
