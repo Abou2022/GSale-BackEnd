@@ -46,7 +46,8 @@ router.post('/', bearerAuth, async (req, res) => {
                                 : null;
         if (message)
             return res.status(400).json(`BAD REQUEST ERROR: ${message}`);
-        const category = await Category.create();
+        const categories = req.body.categories ? req.body.categories : {}; 
+        const category = await Category.create(categories);
         req.body.category_id = category.id;
         const data = await GarageSaleEvent.create(req.body);
         res.status(200).json(data);

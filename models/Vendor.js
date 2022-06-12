@@ -77,9 +77,6 @@ Vendor.init(
             required: true,
             allowNull: false,
         },
-        image: {
-            type: DataTypes.STRING,
-        },
         description: {
             type: DataTypes.STRING,
             required: true,
