@@ -85,24 +85,6 @@ Project requirements:
 &nbsp;
 
 ---
-
-# Screenshots
-
-## Homepage
-![Homepage](./public/Assets/Homepage%20Demo.gif)
-
-## Signup Page
-![Signup](./public/Assets/Upload%20Demo.gif)
-
-## Sale Event Page
-![Event](./public/Assets/Editor%20Demo.gif)
-
-## Page
-![Updating Account](./public/Assets/UpdateAccount.gif)
-
-&nbsp;
-
----
 # Contributing
 
 This project was completed as a collaborative group for Project 3 from the University of Washington Web Development Bootcamp. If you would like to contribute, please feel free to contact any of the team members with questions or comments.
